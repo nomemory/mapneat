@@ -7,11 +7,9 @@ Under the hood **MapNeat** is using:
 
 # Getting Started
 
-The library is still in development. For the moment the only way to use it is to clone it, create the jar and included it in your project.
-After more tests are going to be added the library will be included in a central repository (bintray and/or maven central). 
+The library is still in development. 
+For the moment the only way to use it is to clone it, create the jar and included it in your project. 
 
-
-:wq
 # How it works
 
 Every transformation on a source JSON, XML or POJO follows the same pattern:
@@ -27,11 +25,13 @@ val transformedJson = json(fromJson(jsonValue)) {
 }.getPrettyString() // Transformed output
 ```
 
-If the source is XML we can use `fromXML(xmlValue: String)`. In this case the `xmlValue` is automatically converted to JSON using [JSON In Java](https://github.com/stleary/JSON-java).
+If the source is XML, `fromXML(xmlValue: String)`can be used. In this case the `xmlValue` is automatically converted to JSON using [JSON In Java](https://github.com/stleary/JSON-java).
 
-If the source is a Java Object 
+If the source is a POJO `fromObject(object)` can be used.
 
-Now, a typical transformation looks like this:
+# A typical transformation
+
+A typical transformation looks like this:
 
 ```kotlin
 package net.andreinc.mapneat.examples
@@ -126,7 +126,7 @@ fun main() {
 }
 ```
 
-After all the operations are performed, the output looks like this:
+After all the operations are performed step by step, the output looks like this:
 
 ```json
 {

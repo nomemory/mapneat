@@ -1,0 +1,21 @@
+{
+  "books" : [
+    {
+      "title" : "Cool dog",
+      "author" : "Mike Smith"
+    },
+    {
+      "title": "Feeble Cat",
+      "author": "John Cibble"
+    },
+    {
+      "title": "Morning Horse",
+      "author": "Kohn Gotcha"
+    }
+  ],
+  "address" : {
+    "country" : "RO",
+    "street_number": 123,
+    "city": "Bucharest"
+  }
+}

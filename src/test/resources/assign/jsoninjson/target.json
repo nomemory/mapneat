@@ -1,0 +1,10 @@
+{
+  "author" : {
+    "firstName" : "John",
+    "lastName" : "Cibble",
+    "book" : "Feeble Cat",
+    "address" : {
+      "country" : "UK"
+    }
+  }
+}

@@ -27,20 +27,14 @@ val transformedJson = json(fromJson(jsonValue)) {
 
 If the source is XML, `fromXML(xmlValue: String)`can be used. In this case the `xmlValue` is automatically converted to JSON using [JSON In Java](https://github.com/stleary/JSON-java).
 
-If the source is a POJO `fromObject(object)` can be used.
+If the source is a POJO, `fromObject(object)` can be used. In this case the object is converted to JSON using jackson.
 
 # A typical transformation
 
-A typical transformation looks like this:
+A typical transformation looks like this, given two source JSON files:
 
-```kotlin
-package net.andreinc.mapneat.examples
-
-import net.andreinc.mapneat.dsl.json
-import net.andreinc.mapneat.model.MapNeatSource
-import net.andreinc.mapneat.model.MapNeatSource.Companion.fromJson
-
-val JSON1 = """
+JSON1:
+```json
 {
   "id": 380557,
   "first_name": "Gary",
@@ -66,14 +60,18 @@ val JSON1 = """
     }
   ]
 }
-""".trimIndent()
+```
 
-val JSON2 = """
-    {
-        "citizenship" : [ "Romanian", "French" ]
-    }
-""".trimIndent()
+and JSON2:
+```json
+{
+  "citizenship" : [ "Romanian", "French" ]
+}
+```
 
+We write the **MapNeat** transformation like:
+
+```kotlin
 fun main() {
     val transform = json(fromJson(JSON1)) {
 
@@ -81,18 +79,22 @@ fun main() {
         "person.firstName"  *= "$.first_name"
         "person.lastName"   *= "$.last_name"
 
-        // We can using a nested assignment instead of using the "." notationa
+        // We can using a nested json assignment instead of using the "." notation
         "person.meta" /= json {
             "information1" /= "ABC"
             "information2" /= "ABC2"
         }
-
+        
+        // We can assign a value from a lambda expression
         "person.maritalStatus" /= {
-            if(sourceCtx().read("$.married")) "married" else "unmarried"
+            if(sourceCtx().read("$.married")) 
+                "married" 
+            else 
+                "unmarried"
         }
 
         "person.visited" *= {
-            // We select only the country name
+            // We select only the country name from the visits array
             expression = "$.visits[*].country"
             processor = { countries ->
                 // We don't allow duplications so we create a Set
@@ -118,7 +120,7 @@ fun main() {
         // We remove the temporary path
         - "person._tmp"
 
-        // We rename "citizenships" to "citizenship"
+        // We rename "citizenships" to "citizenship" because we don't like typos
         "person.citizenships" %= "person.citizenship"
     }
 
@@ -126,7 +128,7 @@ fun main() {
 }
 ```
 
-After all the operations are performed step by step, the output looks like this:
+After all the operations are performed step by step, the output looks like this, without any real code intervention:
 
 ```json
 {
@@ -193,11 +195,15 @@ Can be written as:
 "person.name" shift "$.user.full_name"
 ```
 
-What I recommend is to pick a convention and either use operators or method names, but don't mix them.
+Personally, I prefer the operator notation (`/=`, `*=`, etc.), but some people consider the methods (`assign`, `shift`) more readable. 
+
+For the rest of the examples the operator notation will be used.
 
 ## Assign (`/=`)
 
-The **Assign** Operation is used to assign a certain value (constant or by evaluating a lambda) to a certain path in the resulting JSON.
+The **Assign** Operation is used to assign a value a path in the resulting JSON (target).
+
+The value can be a constant, or a lambda (`()-> Any`).
 
 Example:
 
@@ -263,9 +269,24 @@ In the lambda method we pass to the `/=` operation we have access to:
 * `sourceCtx()` which represents the `ReadContext` of the source. We can use this to read JSON Paths just like in the example above;
 * `targetCtx()` which represents the `ReacContext` of the target. This is calculated each time on the method is called, so it contains only the changes that were made up until that point. In most cases this shouldn't be called.
 
-For more information on how to the `ReadContext` in your advantage please read the [json-path](https://github.com/json-path/JsonPath) documentation.
+In case we are using an inner JSON structure, we also have reference to the parent source and target contexts:
+* `parent.sourceCtx()`
+* `parent.targetCtx()`
 
-The **Shift** operation can also be used in together with left-side "Array Information" notations (`[]`, `[+]`, `[++]`):
+`parent()` returns a nullable value, so it needs to be used adding `!!` (double bang).
+
+```
+... {
+    "something" /= "Something Value"
+    "person" /= json {
+        "innerSomething" /= { parent()!!.targetCtx().read("$.something") }
+    }
+}
+```
+
+For more information about `ReadContext`s please check [json-path](https://github.com/json-path/JsonPath)'s documentation.
+
+The **Assign** operation can also be used in conjunction with left-side array notations (`[]`, `[+]`, `[++]`):
 
 ```kotlin
 fun main() {
@@ -398,6 +419,10 @@ Output:
 }
 ```
 
+As you can see in the above example, each expression can be accompanied with an additional processor method that allows developers to refine the results provided by the JSON path expression.
+
+Similar to the **Assign** lambdas, `sourceCtx()`, `targetCtx()`, `parent!!.sourceCtx()`, `parent!!.targetCtx()` are also available to the method context and can be used. 
+
 ## Copy (`%`)
 
 The **Copy** Operation moves a certain path from the target JSON to another path in the target JSON.
@@ -413,7 +438,6 @@ fun main() {
     val transformed = json("{}") {
         "some.long.path" /= mutableListOf("A, B, C")
         "some.long.path" % "copy"
-
         println(this)
     }
 }

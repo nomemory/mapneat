@@ -5,7 +5,6 @@ import com.jayway.jsonpath.JsonPath
 import com.jayway.jsonpath.ReadContext
 import net.andreinc.mapneat.config.JsonPathConfiguration.mapNeatConfiguration
 import net.andreinc.mapneat.operation.abstract.Operation
-import java.lang.RuntimeException
 
 open class MapNeatObjectMap (val source: String) {
 

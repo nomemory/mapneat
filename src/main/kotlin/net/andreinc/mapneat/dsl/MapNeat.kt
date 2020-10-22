@@ -1,10 +1,21 @@
 package net.andreinc.mapneat.dsl
 
+import net.andreinc.mapneat.exceptions.MapNeatException
 import net.andreinc.mapneat.model.MapNeatObjectMap
 import net.andreinc.mapneat.model.MapNeatSource
 import net.andreinc.mapneat.operation.*
 
 class MapNeat(inputJson: String) : MapNeatObjectMap(inputJson) {
+
+    private var parentObject : MapNeat? = null
+
+    fun hasParent() : Boolean {
+        return parentObject != null
+    }
+
+    fun parent() : MapNeat? {
+        return this.parentObject
+    }
 
     constructor(source: MapNeatSource) : this(source.getStringContent())
 
@@ -139,20 +150,23 @@ class MapNeat(inputJson: String) : MapNeatObjectMap(inputJson) {
 
     fun json(init: MapNeat.() -> Unit) : Map<String, Any> {
         return MapNeat(super.source)
+            .apply { parentObject = this@MapNeat }
             .apply(init)
             .getObjectMap()
     }
 
     fun json(json: String, init: MapNeat.() -> Unit) : Map<String, Any> {
         return MapNeat(json)
-                .apply(init)
-                .getObjectMap()
+            .apply { parentObject = this@MapNeat }
+            .apply(init)
+            .getObjectMap()
     }
 
     fun json(source: MapNeatSource, init: MapNeat.() -> Unit): Map<String, Any> {
         return MapNeat(source.content)
-                .apply(init)
-                .getObjectMap()
+            .apply { parentObject = this@MapNeat }
+            .apply(init)
+            .getObjectMap()
     }
 
 }

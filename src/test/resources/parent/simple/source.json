@@ -1,0 +1,25 @@
+{
+  "id": 380557,
+  "first_name": "Gary",
+  "last_name": "Young",
+  "photo": "http://srcimg.com/100/150",
+  "married": false,
+  "visits" : [
+    {
+      "country" : "Romania",
+      "date" : "2020-10-10"
+    },
+    {
+      "country" : "Romania",
+      "date" : "2019-07-21"
+    },
+    {
+      "country" : "Italy",
+      "date" : "2019-12-21"
+    },
+    {
+      "country" : "France",
+      "date" : "2019-02-21"
+    }
+  ]
+}

@@ -1,18 +1,41 @@
-**MapNeat** is a JVM library written in Kotlin that provides an easy to use DSL (*Domain Specific Language*) for transforming JSON to JSON, XML to JSON, POJO to JSON in a declarative way. No intermediary POJOs are needed.
+**MapNeat** is a JVM library written in Kotlin that provides an easy to use DSL (*Domain Specific Language*) for transforming JSON to JSON, XML to JSON, POJO to JSON in a declarative way. 
+No intermediary POJOs are needed.
+
+Given's Kotlin high-interoperability **MapNeat** can be used in a Java project without any particular hassle. 
+Check the documentation for examples on how to do that. 
 
 Under the hood **MapNeat** is using:
 * [jackson](https://github.com/FasterXML/jackson) and [json-path](https://github.com/json-path/JsonPath) for JSON querying and processing;
 * [JSON In Java](https://github.com/stleary/JSON-java) for converting from XML to JSON;
-* [JSONAssert](http://jsonassert.skyscreamer.org/) for making JSON assertions (testing purposes). 
+* [JSONAssert](http://jsonassert.skyscreamer.org/) for making JSON assertions (testing purposes).
+
+Test coverage sits around 58%, but tests are somewhat superficial in nature. 
+I am currently working on hardening the tests. 
 
 # Getting Started
 
-The library is still in development. 
-For the moment the only way to use it is to clone it, create the jar and included it in your project. 
+The library is available in [jcenter()](https://bintray.com/nomemory/maven/mapneat) and can use used with Maven and Gradle:
+
+```kotlin
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    //
+    implementation("net.andreinc.mapneat", "mapneat", "0.9.1")
+    // 
+}
+``` 
 
 # How it works
 
-Every transformation on a source JSON, XML or POJO follows the same pattern:
+The library will transform any JSON, XML or POJO into another JSON, without the need of intermediary POJO classes.
+
+Every operation applied to the source JSON (the input) is declarative in nature, and involves significantly less code than writing everything by hand.
+
+Normally, a transformation has the following structure:
 
 ```kotlin
 val jsonValue : String = "..."
@@ -27,11 +50,11 @@ val transformedJson = json(fromJson(jsonValue)) {
 
 If the source is XML, `fromXML(xmlValue: String)`can be used. In this case the `xmlValue` is automatically converted to JSON using [JSON In Java](https://github.com/stleary/JSON-java).
 
-If the source is a POJO, `fromObject(object)` can be used. In this case the object is converted to JSON using jackson.
+If the source is a POJO, `fromObject(object)` can be used. In this case the `object` is automatically converted to JSON using jackson.
 
 # A typical transformation
 
-A typical transformation looks like this, given two source JSON files:
+A typical transformation looks like this:
 
 JSON1:
 ```json
@@ -62,7 +85,7 @@ JSON1:
 }
 ```
 
-and JSON2:
+JSON2:
 ```json
 {
   "citizenship" : [ "Romanian", "French" ]
@@ -73,6 +96,7 @@ We write the **MapNeat** transformation like:
 
 ```kotlin
 fun main() {
+    // JSON1 and JSON2 are both String variables 
     val transform = json(fromJson(JSON1)) {
 
         "person.id"         /= 100
@@ -128,7 +152,7 @@ fun main() {
 }
 ```
 
-After all the operations are performed step by step, the output looks like this, without any real code intervention:
+After all the operations are performed step by step, the output looks like this:
 
 ```json
 {
@@ -161,9 +185,9 @@ Those are actually shortcuts methods for the operations we are performing:
 | `%=` | `move`     | Moves a path from the target JSON to another path. |
 | `-`  | `delete`   | Deletes a path from the target JSON. |
 
-Additionally, the paths from the target JSON can be "decorated" with "array information"
+Additionally, the paths from the target JSON can be "decorated" with "array notation":
 
-| Array Information | Description |
+| Array Notation | Description |
 | :------- | :------- |
 | `path[]` | A `new` array will be created through the `assign` and `shift` operations. |
 | `path[+]` | An `append` will be performed through the `assign` and `shift` operations. |
@@ -201,9 +225,9 @@ For the rest of the examples the operator notation will be used.
 
 ## Assign (`/=`)
 
-The **Assign** Operation is used to assign a value a path in the resulting JSON (target).
+The **Assign** Operation is used to assign a value to a path in the resulting JSON (target).
 
-The value can be a constant, or a lambda (`()-> Any`).
+The value can be a constant object, or a lambda (`()-> Any`).
 
 Example:
 
@@ -249,7 +273,7 @@ fun main() {
 }
 ```
 
-And the Output is:
+Output:
 ```json
 {
   "user" : {
@@ -267,7 +291,7 @@ And the Output is:
 
 In the lambda method we pass to the `/=` operation we have access to:
 * `sourceCtx()` which represents the `ReadContext` of the source. We can use this to read JSON Paths just like in the example above;
-* `targetCtx()` which represents the `ReacContext` of the target. This is calculated each time on the method is called, so it contains only the changes that were made up until that point. In most cases this shouldn't be called.
+* `targetCtx()` which represents the `ReacContext` of the target. This is calculated each time we call the method. So, it contains only the changes that were made up until that point. In most cases this shouldn't be called.
 
 In case we are using an inner JSON structure, we also have reference to the parent source and target contexts:
 * `parent.sourceCtx()`
@@ -523,3 +547,41 @@ Output:
   }
 }
 ```
+
+# Using **MapNeat** from Java
+
+Given Kotlin's high level of interoperability with Java, **MapNeat** can be used in any Java application.
+
+The DSL file should remain kotlin, but it can be called from any Java program, as simple as:
+
+```kotlin
+@file : JvmName("Sample")
+
+package kotlinPrograms
+
+import net.andreinc.mapneat.dsl.json
+
+fun personTransform(input: String) : String {
+    return json(input) {
+        "person.name" /= "Andrei"
+        "person.age" /= 13
+    }.getPrettyString()
+}
+```
+
+The java file:
+
+```java
+import static kotlinPrograms.Sample.personTransform;
+
+public class Main {
+    public static void main(String[] args) {
+        // personTransform(String) is the method from Kotlin
+        String person = personTransform("{}");
+        System.out.println(person);
+    }
+}
+```
+
+PS: Configuring the Java application to be Kotlin-enabled it's quite simple, usually IntelliJ is doing this automatically without amy developer intervention. 
+

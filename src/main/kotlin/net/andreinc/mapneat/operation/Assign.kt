@@ -10,8 +10,10 @@ import org.apache.logging.log4j.kotlin.Logging
 
 typealias AssignOperationMethod = () -> Any
 
-class Assign(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any>, transformationId : String) : Operation(sourceCtx, targetMapRef, transformationId),
-    MappingOperation, Logging {
+class Assign(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any>, transformationId : String) :
+    Operation(sourceCtx, targetMapRef, transformationId),
+    MappingOperation,
+    Logging {
 
     lateinit var value : Any
     lateinit var method: AssignOperationMethod
@@ -20,7 +22,7 @@ class Assign(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any>, tran
         onSelectedField { current, fieldContext ->
             doMappingOperation(current, fieldContext)
             val content = writer.writeValueAsString(current[fieldContext.name])
-            logger.info { "(id=${transformationId}) \"${fullFieldPath}\" ASSIGN(/=) ${content}" }
+            logger.info { "(transformationId=${transformationId}) \"${fullFieldPath}\" ASSIGN(/=) ${content}" }
         }
     }
 

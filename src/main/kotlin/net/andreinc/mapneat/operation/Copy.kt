@@ -6,7 +6,9 @@ import net.andreinc.mapneat.operation.abstract.Operation
 import net.andreinc.mapneat.operation.abstract.StructuralOperation
 import org.apache.logging.log4j.kotlin.Logging
 
-class Copy(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any>, transformationId : String) : Operation(sourceCtx, targetMapRef, transformationId), StructuralOperation,
+class Copy(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any>, transformationId : String) :
+    Operation(sourceCtx, targetMapRef, transformationId),
+    StructuralOperation,
     Logging {
 
     lateinit var destination: String

@@ -129,8 +129,8 @@ class MapNeat(val inputJson: String, val parentObject: MapNeat? = null, val tran
             .doOperation()
     }
 
-    // DSL Copy
-    // Delete transformation DSL methods
+    // Copy transformation DSL methods
+
     infix fun String.copy(value: String) {
         Copy(sourceCtx, targetMap, transformationId).apply{
             fullFieldPath = this@copy
@@ -162,7 +162,7 @@ class MapNeat(val inputJson: String, val parentObject: MapNeat? = null, val tran
     }
 
     fun json(source: MapNeatSource, init: MapNeat.() -> Unit): Map<String, Any> {
-        return MapNeat(source.content)
+        return MapNeat(source.content, this, transformationId)
             .apply(init)
             .getObjectMap()
     }

@@ -10,7 +10,10 @@ import org.apache.logging.log4j.kotlin.Logging
  * A transformation that moves a branch from one place to another inside the target output
  * It can be also used to rename fields
  */
-class Move(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any>, transformationId : String) : Operation(sourceCtx, targetMapRef, transformationId), StructuralOperation, Logging {
+class Move(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any>, transformationId : String) :
+    Operation(sourceCtx, targetMapRef, transformationId),
+    StructuralOperation,
+    Logging {
 
     lateinit var newField : String
 

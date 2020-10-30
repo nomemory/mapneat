@@ -6,7 +6,10 @@ import net.andreinc.mapneat.operation.abstract.MappingOperation
 import net.andreinc.mapneat.operation.abstract.Operation
 import org.apache.logging.log4j.kotlin.Logging
 
-class Shift(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any>, transformationId : String) : Operation(sourceCtx, targetMapRef, transformationId), MappingOperation, Logging {
+class Shift(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any>, transformationId : String) :
+    Operation(sourceCtx, targetMapRef, transformationId),
+    MappingOperation,
+    Logging {
 
     lateinit var jsonPath : JsonPathQuery
 

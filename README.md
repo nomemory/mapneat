@@ -24,7 +24,7 @@ repositories {
 
 dependencies {
     //
-    implementation("net.andreinc.mapneat", "mapneat", "0.9.1")
+    implementation("net.andreinc.mapneat", "mapneat", "0.9.2")
     // 
 }
 ``` 
@@ -583,5 +583,48 @@ public class Main {
 }
 ```
 
-PS: Configuring the Java application to be Kotlin-enabled it's quite simple, usually IntelliJ is doing this automatically without amy developer intervention. 
+PS: Configuring the Java application to be Kotlin-enabled it's quite simple, usually IntelliJ is doing this automatically without amy developer intervention.
+
+# Logging
+
+The library uses log4j2 for logging purposes. 
+
+Each transformation gets logged by default to `SYSTEM_OUT`and to `logs/mapneat.log`.
+
+For tracing and debugging purposes transformations have two IDs (id, parentId - if inner JSONs are used).
+
+E.g.:
+
+```
+19:05:06.204 [main] INFO  net.andreinc.mapneat.dsl.MapNeat - Transformation(id=a739ba94-dedd-4d5b-bd09-03b30693a1ae, parentId=null) INPUT = {
+  "books" : [
+    {
+      "title" : "Cool dog",
+      "author" : "Mike Smith"
+    },
+    {
+      "title": "Feeble Cat",
+      "author": "John Cibble"
+    },
+    {
+      "title": "Morning Horse",
+      "author": "Kohn Gotcha"
+    }
+  ],
+  "address" : {
+    "country" : "RO",
+    "street_number": 123,
+    "city": "Bucharest"
+  }
+}
+19:05:06.209 [main] INFO  net.andreinc.mapneat.dsl.MapNeat - Transformation(id=a739ba94-dedd-4d5b-bd09-03b30693a1ae, parentId=a739ba94-dedd-4d5b-bd09-03b30693a1ae) INPUT = INHERITED
+19:05:06.244 [main] INFO  net.andreinc.mapneat.operation.Assign - (transformationId=a739ba94-dedd-4d5b-bd09-03b30693a1ae) "fullName" ASSIGN(/=) "John Cibble"
+19:05:06.246 [main] INFO  net.andreinc.mapneat.operation.Assign - (transformationId=a739ba94-dedd-4d5b-bd09-03b30693a1ae) "firstName" ASSIGN(/=) "John"
+19:05:06.246 [main] INFO  net.andreinc.mapneat.operation.Assign - (transformationId=a739ba94-dedd-4d5b-bd09-03b30693a1ae) "lastName" ASSIGN(/=) "Cibble"
+19:05:06.248 [main] INFO  net.andreinc.mapneat.operation.Delete - (transformationId=a739ba94-dedd-4d5b-bd09-03b30693a1ae) DELETE(-) "fullName"
+```
+
+`(transformationId=a739ba94-dedd-4d5b-bd09-03b30693a1ae)` => represents the id
+`Transformation(id=a739ba94-dedd-4d5b-bd09-03b30693a1ae, parentId=a739ba94-dedd-4d5b-bd09-03b30693a1ae) INPUT = INHERITED` => marks the parentId
+   
 

@@ -12,6 +12,7 @@ open class MapNeatTest(private val source: String, private val expected: String,
     private val writer : ObjectWriter = ObjectMapper().writerWithDefaultPrettyPrinter()
 
     companion object {
+
         const val SOURCE_XML : String = "/source.xml"
         const val SOURCE_JSON : String = "/source.json"
         const val EXPECTED_JSON : String = "/target.json"

@@ -1,18 +1,26 @@
 package net.andreinc.mapneat.operation.abstract
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.ObjectWriter
 import com.jayway.jsonpath.JsonPath
 import com.jayway.jsonpath.ReadContext
 import net.andreinc.mapneat.exceptions.FieldAlreadyExistsAndNotAnObject
 import net.andreinc.mapneat.exceptions.OperationFieldIsNotInitialized
 import java.lang.ClassCastException
+import java.util.*
+import kotlin.collections.LinkedHashMap
 
 class FieldContext(val path: List<String>, val name: String, val arrayChange: ArrayChange)
 typealias FieldAction = (MutableMap<String, Any>, FieldContext) -> Unit
 
-abstract class Operation(private val sourceCtx: ReadContext, val targetMapRef: MutableMap<String, Any>) {
+abstract class Operation(private val sourceCtx: ReadContext, val targetMapRef: MutableMap<String, Any>, val transformationId : String = UUID.randomUUID().toString()) {
+
+    companion object {
+        val writer : ObjectWriter = ObjectMapper().writer().withDefaultPrettyPrinter()
+    }
 
     // The "left-side" field that is affected by the operation
-    lateinit var field : String
+    lateinit var fullFieldPath : String
 
     // The method that is actually performing the operation
     abstract fun doOperation()
@@ -27,8 +35,8 @@ abstract class Operation(private val sourceCtx: ReadContext, val targetMapRef: M
         return JsonPath.parse(targetMapRef)
     }
 
-    fun onField(affectedField: String, action: FieldAction) {
-        val fieldContext = getFieldContext(affectedField)
+    fun onField(fullFieldPath: String, action: FieldAction) {
+        val fieldContext = getFieldContext(fullFieldPath)
         val fullPath = fieldContext.path
         val fieldName = fieldContext.name
         var current = targetMapRef
@@ -49,11 +57,11 @@ abstract class Operation(private val sourceCtx: ReadContext, val targetMapRef: M
 
     fun onSelectedField(action: FieldAction) {
 
-        if (!this::field.isInitialized) {
+        if (!this::fullFieldPath.isInitialized) {
             throw OperationFieldIsNotInitialized()
         }
 
-        onField(field, action)
+        onField(fullFieldPath, action)
     }
 
     //TODO escape "., [, +, ]"

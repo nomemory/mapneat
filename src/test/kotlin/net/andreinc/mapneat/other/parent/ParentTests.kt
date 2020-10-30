@@ -1,6 +1,9 @@
-package net.andreinc.mapneat.parent
+package net.andreinc.mapneat.other.parent
 
 import net.andreinc.mapneat.MapNeatTest.Companion.testFromDirectory
+import net.andreinc.mapneat.dsl.json
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class ParentTests {
@@ -12,5 +15,14 @@ class ParentTests {
                 "something" /= { parent()!!.targetCtx().read("$.something") }
             }
         }.doTest()
+    }
+
+    @Test
+    fun `Test if hasParent() returns a correct value` () {
+        json("{}") {
+            "value" /= json("{}") {
+                assertTrue(hasParent())
+            }
+        }
     }
 }

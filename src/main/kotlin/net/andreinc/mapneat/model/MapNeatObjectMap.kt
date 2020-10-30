@@ -10,7 +10,6 @@ open class MapNeatObjectMap (val source: String) {
 
     protected val targetMap = LinkedHashMap<String, Any>()
     protected val sourceCtx: ReadContext = JsonPath.using(mapNeatConfiguration).parse(source)
-    protected val operations: MutableList<Operation> = mutableListOf()
 
     fun sourceCtx() : ReadContext {
         return this.sourceCtx
@@ -32,9 +31,5 @@ open class MapNeatObjectMap (val source: String) {
 
     fun getString() : String {
         return ObjectMapper().writeValueAsString(targetMap)
-    }
-
-    fun execute() {
-        operations.forEach { it.doOperation() }
     }
 }

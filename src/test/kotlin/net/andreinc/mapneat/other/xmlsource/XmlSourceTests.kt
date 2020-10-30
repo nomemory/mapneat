@@ -1,6 +1,5 @@
-package net.andreinc.mapneat.xmlsource
+package net.andreinc.mapneat.other.xmlsource
 
-import net.andreinc.mapneat.MapNeatTest
 import net.andreinc.mapneat.MapNeatTest.Companion.testFromDirectory
 import org.junit.jupiter.api.Test
 

@@ -1,13 +1,17 @@
 package net.andreinc.mapneat.dsl
 
-import net.andreinc.mapneat.exceptions.MapNeatException
 import net.andreinc.mapneat.model.MapNeatObjectMap
 import net.andreinc.mapneat.model.MapNeatSource
 import net.andreinc.mapneat.operation.*
+import org.apache.logging.log4j.kotlin.Logging
+import java.util.*
 
-class MapNeat(inputJson: String) : MapNeatObjectMap(inputJson) {
-
-    private var parentObject : MapNeat? = null
+/**
+ * This is the starting point of the DSL.
+ *
+ * The MapNeat class extends MapNeatObjectMap which holds internal representation of a JSON as a MutableMap<String, Any>
+ */
+class MapNeat(inputJson: String, val parentObject: MapNeat? = null, val transformationId : String = UUID.randomUUID().toString()) : MapNeatObjectMap(inputJson), Logging {
 
     fun hasParent() : Boolean {
         return parentObject != null
@@ -17,108 +21,108 @@ class MapNeat(inputJson: String) : MapNeatObjectMap(inputJson) {
         return this.parentObject
     }
 
-    constructor(source: MapNeatSource) : this(source.getStringContent())
-
-    fun assign(init: Assign.() -> Unit) {
-        Assign(sourceCtx, targetMap).apply(init).doOperation()
+    init {
+        // All the operations associated with a transformation will be logged using the same ID
+        // for an easier tracking inside the logs
+        logger.info { "Transformation(id=$transformationId, parentId=${parentObject?.transformationId}) with input = ${inputJson}"}
     }
 
+    private constructor(source: MapNeatSource) : this(source.getStringContent())
+
     infix operator fun String.divAssign(constantValue: Any) {
-        Assign(sourceCtx, targetMap).apply {
-            field = this@divAssign
+        Assign(sourceCtx, targetMap, transformationId).apply {
+            fullFieldPath = this@divAssign
             value = constantValue
         }.doOperation()
     }
 
     infix operator fun String.divAssign(acc: AssignOperationMethod) {
-        Assign(sourceCtx, targetMap).apply {
-            field = this@divAssign
+        Assign(sourceCtx, targetMap, transformationId).apply {
+            fullFieldPath = this@divAssign
             method = acc
         }.doOperation()
     }
 
     infix fun String.assign(constantValue: Any) {
-        Assign(sourceCtx, targetMap).apply {
-            field = this@assign
+        Assign(sourceCtx, targetMap, transformationId).apply {
+            fullFieldPath = this@assign
             value = constantValue
         }.doOperation()
     }
 
     infix fun String.assign(acc: AssignOperationMethod) {
-        Assign(sourceCtx, targetMap).apply {
-            field = this@assign
+        Assign(sourceCtx, targetMap, transformationId).apply {
+            fullFieldPath = this@assign
             method = acc
         }.doOperation()
     }
 
     // Shift transformation DSL methods
-    fun shift(init: Shift.() -> Unit) {
-        Shift(sourceCtx, targetMap).apply(init).doOperation()
-    }
 
     infix operator fun String.timesAssign(value: String) {
-        Shift(sourceCtx, targetMap).apply {
+        Shift(sourceCtx, targetMap, transformationId).apply {
             jsonPath = JsonPathQuery().apply {
                 expression = value
             }
-            field = this@timesAssign
+            fullFieldPath = this@timesAssign
         }.doOperation()
     }
 
     infix operator fun String.timesAssign(value: JsonPathQuery.() -> Unit) {
-        Shift(sourceCtx, targetMap).apply {
+        Shift(sourceCtx, targetMap, transformationId).apply {
             jsonPath = JsonPathQuery().apply(value)
-            field = this@timesAssign
+            fullFieldPath = this@timesAssign
         }.doOperation()
     }
 
     infix fun String.shift(value: String) {
-        Shift(sourceCtx, targetMap).apply {
+        Shift(sourceCtx, targetMap, transformationId).apply {
             jsonPath = JsonPathQuery().apply {
                 expression = value
             }
-            field = this@shift
+            fullFieldPath = this@shift
         }.doOperation()
     }
 
     infix fun String.shift(value: JsonPathQuery.() -> Unit) {
-        Shift(sourceCtx, targetMap).apply {
+        Shift(sourceCtx, targetMap, transformationId).apply {
             jsonPath = JsonPathQuery().apply(value)
-            field = this@shift
+            fullFieldPath = this@shift
         }.doOperation()
     }
 
     // Delete transformation DSL methods
-    fun delete(init: Delete.() -> Unit) {
-        Delete(sourceCtx, targetMap).apply(init).doOperation()
+
+    fun delete(value: String) {
+        Delete(sourceCtx, targetMap, transformationId)
+            .apply {
+                fullFieldPath = value
+            }.doOperation()
     }
 
     operator fun String.unaryMinus() {
-        Delete(sourceCtx, targetMap)
+        Delete(sourceCtx, targetMap, transformationId)
             .apply {
-                field = this@unaryMinus
+                fullFieldPath = this@unaryMinus
             }
             .doOperation()
     }
 
     // Move transformation DSL methods
-    fun move(init: Move.() -> Unit) {
-        Move(sourceCtx, targetMap).apply(init).doOperation()
-    }
 
     infix operator fun String.remAssign(value : String) {
-        Move(sourceCtx, targetMap)
+        Move(sourceCtx, targetMap, transformationId)
             .apply {
-                this.field = this@remAssign
+                this.fullFieldPath = this@remAssign
                 this.newField = value
             }
             .doOperation()
     }
 
     infix fun String.move(value: String) {
-        Move(sourceCtx, targetMap)
+        Move(sourceCtx, targetMap, transformationId)
             .apply {
-                this.field = this@move
+                this.fullFieldPath = this@move
                 this.newField = value
             }
             .doOperation()
@@ -127,19 +131,15 @@ class MapNeat(inputJson: String) : MapNeatObjectMap(inputJson) {
     // DSL Copy
     // Delete transformation DSL methods
     infix fun String.copy(value: String) {
-        Copy(sourceCtx, targetMap).apply{
-            field = this@copy
+        Copy(sourceCtx, targetMap, transformationId).apply{
+            fullFieldPath = this@copy
             destination = value
         }.doOperation()
     }
 
-    fun copy(init: Copy.() -> Unit) {
-        Copy(sourceCtx, targetMap).apply(init).doOperation()
-    }
-
    infix operator fun String.rem(value: String) {
-       Copy(sourceCtx, targetMap).apply {
-           field = this@rem
+       Copy(sourceCtx, targetMap, transformationId).apply {
+           fullFieldPath = this@rem
            destination = value
        }.doOperation()
    }
@@ -149,22 +149,19 @@ class MapNeat(inputJson: String) : MapNeatObjectMap(inputJson) {
     }
 
     fun json(init: MapNeat.() -> Unit) : Map<String, Any> {
-        return MapNeat(super.source)
-            .apply { parentObject = this@MapNeat }
+        return MapNeat(super.source, this, transformationId)
             .apply(init)
             .getObjectMap()
     }
 
     fun json(json: String, init: MapNeat.() -> Unit) : Map<String, Any> {
-        return MapNeat(json)
-            .apply { parentObject = this@MapNeat }
+        return MapNeat(json, this, transformationId)
             .apply(init)
             .getObjectMap()
     }
 
     fun json(source: MapNeatSource, init: MapNeat.() -> Unit): Map<String, Any> {
         return MapNeat(source.content)
-            .apply { parentObject = this@MapNeat }
             .apply(init)
             .getObjectMap()
     }

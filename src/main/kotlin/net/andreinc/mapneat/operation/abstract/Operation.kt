@@ -16,7 +16,10 @@ typealias FieldAction = (MutableMap<String, Any>, FieldContext) -> Unit
 abstract class Operation(private val sourceCtx: ReadContext, val targetMapRef: MutableMap<String, Any>, val transformationId : String = UUID.randomUUID().toString()) {
 
     companion object {
-        val writer : ObjectWriter = ObjectMapper().writer().withDefaultPrettyPrinter()
+        // Mainly used for logging purposes
+        val writer : ObjectWriter = ObjectMapper()
+                                        .writer()
+                                        .withDefaultPrettyPrinter()
     }
 
     // The "left-side" field that is affected by the operation

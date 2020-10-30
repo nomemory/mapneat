@@ -11,7 +11,7 @@ import java.util.*
  *
  * The MapNeat class extends MapNeatObjectMap which holds internal representation of a JSON as a MutableMap<String, Any>
  */
-class MapNeat(inputJson: String, val parentObject: MapNeat? = null, val transformationId : String = UUID.randomUUID().toString()) : MapNeatObjectMap(inputJson), Logging {
+class MapNeat(val inputJson: String, val parentObject: MapNeat? = null, val transformationId : String = UUID.randomUUID().toString()) : MapNeatObjectMap(inputJson), Logging {
 
     fun hasParent() : Boolean {
         return parentObject != null
@@ -24,7 +24,8 @@ class MapNeat(inputJson: String, val parentObject: MapNeat? = null, val transfor
     init {
         // All the operations associated with a transformation will be logged using the same ID
         // for an easier tracking inside the logs
-        logger.info { "Transformation(id=$transformationId, parentId=${parentObject?.transformationId}) with input = ${inputJson}"}
+        val printInput = if (inputJson == parent()?.inputJson) "INHERITED" else inputJson
+        logger.info { "Transformation(id=$transformationId, parentId=${parentObject?.transformationId}) INPUT = ${printInput}"}
     }
 
     private constructor(source: MapNeatSource) : this(source.getStringContent())

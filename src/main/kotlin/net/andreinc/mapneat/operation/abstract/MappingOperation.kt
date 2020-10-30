@@ -3,10 +3,10 @@ package net.andreinc.mapneat.operation.abstract
 import net.andreinc.mapneat.exceptions.CannotMergeNonIterableElement
 
 enum class ArrayChange (val isAffecting: Boolean) {
-    NEW(true),
-    APPEND(true),
-    MERGE(true),
-    NONE(false)
+    NEW(true),      // some.field[]
+    APPEND(true),   // some.field[+]
+    MERGE(true),    // some.field[++]
+    NONE(false)     // some.field
 }
 
 interface MappingOperation {
@@ -20,7 +20,7 @@ interface MappingOperation {
 }
 
 @Suppress("UNCHECKED_CAST")
-class MappingAction (private val current: MutableMap<String, Any>, private val fieldContext: FieldContext, private val mappedValue: Any) {
+class MappingAction (val current: MutableMap<String, Any>, val fieldContext: FieldContext, val mappedValue: Any) {
 
     private var field: String = fieldContext.name
     private var arrayChange: ArrayChange = fieldContext.arrayChange
@@ -34,6 +34,8 @@ class MappingAction (private val current: MutableMap<String, Any>, private val f
         return this
     }
 
+    // Goes to the field and transforms any potential Iterable values into "friendly" mutable lists.
+    // I have to do this, in order to prevent error-prone Assign Operations with immutable iterables.
     private fun iterableToMutableList() : MappingAction {
 
         if (current[field] is Iterable<*> && current[field] !is MutableList<*>) {
@@ -57,8 +59,10 @@ class MappingAction (private val current: MutableMap<String, Any>, private val f
         return this
     }
 
+    // Transforms current one in a mutable list if needed
     private fun currentAsMutableList() : MutableList<Any> {
         if (!current.containsKey(field)) {
+            // If the current path doesn't exist, create an empty MutableList
             current[field] = mutableListOf<Any>()
         }
         else {
@@ -72,12 +76,15 @@ class MappingAction (private val current: MutableMap<String, Any>, private val f
                 current[field] !is DoubleArray &&
                 current[field] !is FloatArray &&
                 current[field] !is BooleanArray) {
+                // If there's not an iterable, but a single field, we create a
+                // one element mutable list
                 current[field] = mutableListOf(current[field] as Any)
             }
         }
         return current[field] as MutableList<Any>
     }
 
+    // Maps a certain value on the selected field from the Field Context
     private fun mapValue() : MappingAction {
         when(arrayChange) {
             ArrayChange.NONE -> current[field] = mappedValue
@@ -85,6 +92,8 @@ class MappingAction (private val current: MutableMap<String, Any>, private val f
             ArrayChange.APPEND -> currentAsMutableList().add(mappedValue)
             ArrayChange.MERGE -> {
                 when(mappedValue) {
+                    // If we need to merge an iterable, we just merge the values in a
+                    // the new mutable list we've created
                     is Array<*> -> currentAsMutableList().addAll(mappedValue as Array<Any>)
                     is ByteArray -> currentAsMutableList().addAll((mappedValue).toList())
                     is CharArray -> currentAsMutableList().addAll(mappedValue.toList())

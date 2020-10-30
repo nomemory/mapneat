@@ -1,7 +1,7 @@
 package net.andreinc.mapneat.operation
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.jayway.jsonpath.ReadContext
+
 import net.andreinc.mapneat.exceptions.AssignOperationNotInitialized
 import net.andreinc.mapneat.model.MapNeatObjectMap
 import net.andreinc.mapneat.operation.abstract.MappingOperation
@@ -19,7 +19,8 @@ class Assign(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any>, tran
     override fun doOperation() {
         onSelectedField { current, fieldContext ->
             doMappingOperation(current, fieldContext)
-            logger.info { "(transformationId=$transformationId) \"${fullFieldPath}\" ASSIGN(/=) ${writer.writeValueAsString(current[fieldContext.name])}" }
+            val content = writer.writeValueAsString(current[fieldContext.name])
+            logger.info { "(id=${transformationId}) \"${fullFieldPath}\" ASSIGN(/=) ${content}" }
         }
     }
 

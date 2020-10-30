@@ -14,11 +14,17 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>1.4.10</kotlin.version>
         <kotlin.code.style>official</kotlin.code.style>
+        <kotlin.script.runtime.version>1.4.10</kotlin.script.runtime.version>
+        <kotlin.compiler.embeddable.version>1.4.10</kotlin.compiler.embeddable.version>
+        <kotlin.script.util>1.4.10</kotlin.script.util>
+        <kotlin.scripting.compiler.embeddable.version>1.4.10</kotlin.scripting.compiler.embeddable.version>
         <junit.version>5.4.2</junit.version>
         <jsonpath.version>2.4.0</jsonpath.version>
         <org.json.version>20200518</org.json.version>
         <jackson.version>2.12.0-rc1</jackson.version>
         <jsonassert.version>1.5.0</jsonassert.version>
+        <log4jkotlin.version>1.0.0</log4jkotlin.version>
+        <log4j.version>2.13.3</log4j.version>
     </properties>
 
     <dependencies>
@@ -26,6 +32,26 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
             <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-compiler-embeddable</artifactId>
+            <version>${kotlin.compiler.embeddable.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-script-util</artifactId>
+            <version>${kotlin.script.util}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-script-runtime</artifactId>
+            <version>${kotlin.script.runtime.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-scripting-compiler-embeddable</artifactId>
+            <version>${kotlin.compiler.embeddable.version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -53,6 +79,21 @@
             <artifactId>jsonassert</artifactId>
             <version>${jsonassert.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api-kotlin</artifactId>
+            <version>${log4jkotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
         </dependency>
     </dependencies>
 

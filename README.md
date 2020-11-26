@@ -1,16 +1,24 @@
 **MapNeat** is a JVM library written in Kotlin that provides an easy to use DSL (*Domain Specific Language*) for transforming JSON to JSON, XML to JSON, POJO to JSON in a declarative way. 
-No intermediary POJOs are needed.
-
-Given's Kotlin high-interoperability **MapNeat** can be used in a Java project without any particular hassle. 
-Check the documentation for examples on how to do that. 
+No intermediary POJOs are needed. Given's Kotlin high-interoperability **MapNeat** can be used in a Java project without any particular hassle. Check the documentation for examples on how to do that. 
 
 Under the hood **MapNeat** is using:
 * [jackson](https://github.com/FasterXML/jackson) and [json-path](https://github.com/json-path/JsonPath) for JSON querying and processing;
 * [JSON In Java](https://github.com/stleary/JSON-java) for converting from XML to JSON;
 * [JSONAssert](http://jsonassert.skyscreamer.org/) for making JSON assertions (testing purposes).
 
-Test coverage sits around 58%, but tests are somewhat superficial in nature. 
-I am currently working on hardening the tests. 
+# Table of contents
+
+* [Getting started](#getting-started)
+* [How it works](#how-it-works)
+* [A typical transformation](#a-typical-transformation)
+* [Operations](#operations)
+    * [Assign](#assign-)
+    * [Shift](#shift-)
+    * [Copy](#copy-)
+    * [Move](#move-)
+    * [Delete](#delete--)  
+* [Using Mapneat from Java](#using-mapneat-from-java)
+* [Logging](#logging)
 
 # Getting Started
 

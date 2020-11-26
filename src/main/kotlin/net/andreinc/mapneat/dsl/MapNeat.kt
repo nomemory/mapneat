@@ -169,12 +169,12 @@ class MapNeat(val inputJson: String, val parentObject: MapNeat? = null, val tran
 
 }
 
-fun json(json: String, init: MapNeat.() -> Unit)  : MapNeat {
+inline fun json(json: String, init: MapNeat.() -> Unit)  : MapNeat {
     return MapNeat(json)
             .apply(init)
 }
 
-fun json(source: MapNeatSource, init: MapNeat.() -> Unit) : MapNeat {
+inline fun json(source: MapNeatSource, init: MapNeat.() -> Unit) : MapNeat {
     return MapNeat(source.content)
             .apply(init)
 }

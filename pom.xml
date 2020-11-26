@@ -14,10 +14,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.version>1.4.10</kotlin.version>
         <kotlin.code.style>official</kotlin.code.style>
-        <kotlin.script.runtime.version>1.4.10</kotlin.script.runtime.version>
-        <kotlin.compiler.embeddable.version>1.4.10</kotlin.compiler.embeddable.version>
-        <kotlin.script.util>1.4.10</kotlin.script.util>
-        <kotlin.scripting.compiler.embeddable.version>1.4.10</kotlin.scripting.compiler.embeddable.version>
         <junit.version>5.4.2</junit.version>
         <jsonpath.version>2.4.0</jsonpath.version>
         <org.json.version>20200518</org.json.version>
@@ -27,13 +23,6 @@
         <log4j.version>2.13.3</log4j.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>jcenter</id>
-            <url>https://jcenter.bintray.com/</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -42,23 +31,19 @@
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-compiler-embeddable</artifactId>
-            <version>${kotlin.compiler.embeddable.version}</version>
+            <artifactId>kotlin-scripting-jvm-host</artifactId>
+            <version>${kotlin.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-script-util</artifactId>
-            <version>${kotlin.script.util}</version>
+            <artifactId>kotlin-scripting-jvm</artifactId>
+            <version>${kotlin.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-script-runtime</artifactId>
-            <version>${kotlin.script.runtime.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-scripting-compiler-embeddable</artifactId>
-            <version>${kotlin.compiler.embeddable.version}</version>
+            <artifactId>kotlin-reflect</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -103,6 +88,13 @@
             <version>${log4j.version}</version>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com/</url>
+        </repository>
+    </repositories>
 
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>

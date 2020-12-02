@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.jayway.jsonpath.JsonPath
 import com.jayway.jsonpath.ReadContext
 import net.andreinc.mapneat.config.JsonPathConfiguration.mapNeatConfiguration
-import net.andreinc.mapneat.operation.abstract.Operation
 
 open class MapNeatObjectMap (val source: String) {
 

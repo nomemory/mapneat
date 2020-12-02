@@ -22,7 +22,7 @@ class Assign(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any>, tran
         onSelectedField { current, fieldContext ->
             doMappingOperation(current, fieldContext)
             val content = writer.writeValueAsString(current[fieldContext.name])
-            logger.info { "(transformationId=${transformationId}) \"${fullFieldPath}\" ASSIGN(/=) ${content}" }
+            logger.info { "(transformationId=${transformationId}) \"${fullFieldPath}\" ASSIGN(/=) $content" }
         }
     }
 

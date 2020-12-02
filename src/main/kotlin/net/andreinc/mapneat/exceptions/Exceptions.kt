@@ -19,7 +19,7 @@ class MoveOperationNotInitialized(fieldName: String) :
 class CopyOperationNotInitialized(fieldName: String) :
         MapNeatException("Copy Operation is not initialized properly for field: '${fieldName}. The target 'destination' needs to be initialised first.")
 
-class OperationFieldIsNotInitialized() :
+class OperationFieldIsNotInitialized :
         MapNeatException("Operation is not initialized properly. 'field' needs to be initialized.")
 
 class CannotMergeNonIterableElement(fieldName: String) :

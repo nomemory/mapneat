@@ -1,7 +1,6 @@
 package net.andreinc.mapneat.operation.assign
 
 import net.andreinc.mapneat.MapNeatTest.Companion.testFromDirectory
-import org.jetbrains.kotlin.ir.backend.js.utils.fieldSignature
 import org.junit.jupiter.api.Test
 
 class AssignTests {

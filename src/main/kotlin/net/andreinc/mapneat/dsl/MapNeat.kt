@@ -25,7 +25,7 @@ class MapNeat(val inputJson: String, val parentObject: MapNeat? = null, val tran
         // All the operations associated with a transformation will be logged using the same ID
         // for an easier tracking inside the logs
         val printInput = if (inputJson == parent()?.inputJson) "INHERITED" else inputJson
-        logger.info { "Transformation(id=$transformationId, parentId=${parentObject?.transformationId}) INPUT = ${printInput}"}
+        logger.info { "Transformation(id=$transformationId, parentId=${parentObject?.transformationId}) INPUT = $printInput"}
     }
 
     private constructor(source: MapNeatSource) : this(source.getStringContent())

@@ -75,18 +75,23 @@ abstract class Operation(private val sourceCtx: ReadContext, val targetMapRef: M
         val name: String
         val arrayChange: ArrayChange
 
-        if (elements.last().endsWith("[]")) {
-            name = elements.last().dropLast(2)
-            arrayChange = ArrayChange.NEW
-        } else if (elements.last().endsWith("[+]")) {
-            name = elements.last().dropLast(3)
-            arrayChange = ArrayChange.APPEND
-        } else if (elements.last().endsWith("[++]")) {
-            name = elements.last().dropLast(4)
-            arrayChange = ArrayChange.MERGE
-        } else {
-            name = elements.last()
-            arrayChange = ArrayChange.NONE
+        when {
+            elements.last().endsWith("[]") -> {
+                name = elements.last().dropLast(2)
+                arrayChange = ArrayChange.NEW
+            }
+            elements.last().endsWith("[+]") -> {
+                name = elements.last().dropLast(3)
+                arrayChange = ArrayChange.APPEND
+            }
+            elements.last().endsWith("[++]") -> {
+                name = elements.last().dropLast(4)
+                arrayChange = ArrayChange.MERGE
+            }
+            else -> {
+                name = elements.last()
+                arrayChange = ArrayChange.NONE
+            }
         }
 
         return FieldContext(path, name, arrayChange)

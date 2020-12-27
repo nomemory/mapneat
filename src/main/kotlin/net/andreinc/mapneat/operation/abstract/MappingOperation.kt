@@ -87,7 +87,16 @@ class MappingAction (val current: MutableMap<String, Any>, val fieldContext: Fie
     // Maps a certain value on the selected field from the Field Context
     private fun mapValue() : MappingAction {
         when(arrayChange) {
-            ArrayChange.NONE -> current[field] = mappedValue
+            ArrayChange.NONE -> {
+                if (field == "" && mappedValue is Map<*, *>) {
+                    (mappedValue as Map<String, Any>).forEach {
+                        current[it.key] = it.value
+                    }
+                }
+                else {
+                    current[field] = mappedValue
+                }
+            }
             ArrayChange.NEW -> current[field] = mutableListOf(mappedValue)
             ArrayChange.APPEND -> currentAsMutableList().add(mappedValue)
             ArrayChange.MERGE -> {

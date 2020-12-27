@@ -453,7 +453,15 @@ Output:
 
 As you can see in the above example, each expression can be accompanied with an additional processor method that allows developers to refine the results provided by the JSON path expression.
 
-Similar to the **Assign** lambdas, `sourceCtx()`, `targetCtx()`, `parent!!.sourceCtx()`, `parent!!.targetCtx()` are also available to the method context and can be used. 
+Similar to the **Assign** lambdas, `sourceCtx()`, `targetCtx()`, `parent!!.sourceCtx()`, `parent!!.targetCtx()` are also available to the method context and can be used.
+
+If you want to `Shift` all the source JSON into the target you can use the following transformation:
+
+```
+"" *= "$
+```
+
+Or call the `copySourceToTarget()` method directly.
 
 ## Copy (`%`)
 

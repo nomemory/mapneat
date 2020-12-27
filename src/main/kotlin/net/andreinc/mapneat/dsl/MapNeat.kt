@@ -5,6 +5,7 @@ import net.andreinc.mapneat.model.MapNeatSource
 import net.andreinc.mapneat.operation.*
 import org.apache.logging.log4j.kotlin.Logging
 import java.util.*
+import kotlin.math.exp
 
 /**
  * This is the starting point of the DSL.
@@ -144,6 +145,15 @@ class MapNeat(val inputJson: String, val parentObject: MapNeat? = null, val tran
            destination = value
        }.doOperation()
    }
+
+    fun copySourceToTarget() {
+        Shift(sourceCtx, targetMap, transformationId).apply {
+            jsonPath = JsonPathQuery().apply {
+                expression = "$"
+            }
+            fullFieldPath = ""
+        }.doOperation()
+    }
 
     override fun toString(): String {
         return getPrettyString()

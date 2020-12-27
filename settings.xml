@@ -5,7 +5,7 @@
         <server>
             <id>bintray-nomemory-maven</id>
             <username>nomemory</username>
-            <password>32af80e5d1eb07457d86e4ae5d9375bfdaac2881</password>
+            <password></password>
         </server>
     </servers>
 </settings>

@@ -32,7 +32,7 @@ repositories {
 
 dependencies {
     //
-    implementation("net.andreinc.mapneat", "mapneat", "0.9.2")
+    implementation("net.andreinc.mapneat", "mapneat", "0.9.3")
     // 
 }
 ``` 

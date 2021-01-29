@@ -33,4 +33,17 @@ class ShiftTests {
         }.doTest()
     }
 
+    @Test
+    fun `Simple shifts with leniency are working properly (shift)` () {
+        testFromDirectory("shift/lenient") {
+            "books" *=  {
+                expression = "$.store.broken.path"
+                lenient = true
+            }
+            "books[++]" *= {
+                expression = "$.store.book[*].title"
+            }
+            println(this)
+        }.doTest()
+    }
 }

@@ -18,6 +18,9 @@ class MapNeat(val inputJson: String, val parentObject: MapNeat? = null, val tran
         return parentObject != null
     }
 
+    /**
+     * This represents a reference of a possible parent JSON.
+     */
     fun parent() : MapNeat? {
         return this.parentObject
     }

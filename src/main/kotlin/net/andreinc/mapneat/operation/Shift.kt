@@ -5,6 +5,7 @@ import net.andreinc.mapneat.exceptions.JsonPathNotInitialized
 import net.andreinc.mapneat.operation.abstract.MappingOperation
 import net.andreinc.mapneat.operation.abstract.Operation
 import org.apache.logging.log4j.kotlin.Logging
+import java.lang.Exception
 
 class Shift(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any>, transformationId : String) :
     Operation(sourceCtx, targetMapRef, transformationId),
@@ -23,13 +24,21 @@ class Shift(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any>, trans
     override fun getMappedValue(): Any {
         if (!this::jsonPath.isInitialized)
             throw JsonPathNotInitialized(fullFieldPath)
-        val result =
+        val result = if (!this.jsonPath.lenient) {
             sourceCtx().read<Any>(jsonPath.expression)
+        } else {
+            try {
+                sourceCtx().read<Any>(jsonPath.expression)
+            } catch (e: Exception) {
+                ""
+            }
+        }
         return this.jsonPath.processor(result)
     }
 }
 
 class JsonPathQuery {
     lateinit var expression : String
-    var processor : (input: Any) -> Any = { s -> s }
+    var lenient : Boolean = false
+    var processor : (input: Any) -> Any = { it }
 }

@@ -12,7 +12,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <kotlin.version>1.4.21</kotlin.version>
+        <kotlin.version>1.4.21-2</kotlin.version>
         <kotlin.code.style>official</kotlin.code.style>
         <junit.version>5.7.0</junit.version>
         <jsonpath.version>2.5.0</jsonpath.version>

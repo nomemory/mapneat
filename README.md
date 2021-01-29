@@ -19,6 +19,7 @@ Under the hood **MapNeat** is using:
     * [Delete](#delete--)  
 * [Using Mapneat from Java](#using-mapneat-from-java)
 * [Logging](#logging)
+* [Contributions and Roadmap](#contributing-and-roadmap)
 
 # Getting Started
 
@@ -652,4 +653,10 @@ E.g.:
 `(transformationId=a739ba94-dedd-4d5b-bd09-03b30693a1ae)` => represents the id
 `Transformation(id=a739ba94-dedd-4d5b-bd09-03b30693a1ae, parentId=a739ba94-dedd-4d5b-bd09-03b30693a1ae) INPUT = INHERITED` => marks the parentId
    
+# Contributing and Roadmap
 
+The highlevel roadmap for the library at this moment is:
+1. Make mapneat a command-line tool
+2. Create a mapneat-server to serve transformation sync / async
+
+Anyone if free to contribute. You know how github works:).

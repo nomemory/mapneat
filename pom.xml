@@ -16,7 +16,7 @@
         <kotlin.code.style>official</kotlin.code.style>
         <junit.version>5.7.0</junit.version>
         <jsonpath.version>2.4.0</jsonpath.version>
-        <org.json.version>20200518</org.json.version>
+        <org.json.version>20201115</org.json.version>
         <jackson.version>2.12.0-rc1</jackson.version>
         <jsonassert.version>1.5.0</jsonassert.version>
         <log4jkotlin.version>1.0.0</log4jkotlin.version>

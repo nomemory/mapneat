@@ -463,6 +463,15 @@ If you want to `Shift` all the source JSON into the target you can use the follo
 
 Or call the `copySourceToTarget()` method directly.
 
+In case a field is optional, and you don't want automatically fail the mapping, you can use the `leniency` property:
+
+```kotlin
+"books" *=  {
+                expression = "$.store.broken.path"
+                lenient = true
+            }
+```
+
 ## Copy (`%`)
 
 The **Copy** Operation moves a certain path from the target JSON to another path in the target JSON.

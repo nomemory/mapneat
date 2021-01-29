@@ -17,7 +17,7 @@
         <junit.version>5.4.2</junit.version>
         <jsonpath.version>2.4.0</jsonpath.version>
         <org.json.version>20200518</org.json.version>
-        <jackson.version>2.12.0-rc1</jackson.version>
+        <jackson.version>2.12.1</jackson.version>
         <jsonassert.version>1.5.0</jsonassert.version>
         <log4jkotlin.version>1.0.0</log4jkotlin.version>
         <log4j.version>2.13.3</log4j.version>

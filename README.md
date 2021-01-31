@@ -1,4 +1,5 @@
 **MapNeat** is a JVM library written in Kotlin that provides an easy to use DSL (*Domain Specific Language*) for transforming JSON to JSON, XML to JSON, POJO to JSON in a declarative way. 
+
 No intermediary POJOs are needed. Given's Kotlin high-interoperability **MapNeat** can be used in a Java project without any particular hassle. Check the documentation for examples on how to do that. 
 
 Under the hood **MapNeat** is using:
@@ -660,3 +661,8 @@ The highlevel roadmap for the library at this moment is:
 2. Create a mapneat-server to serve transformation sync / async
 
 Anyone if free to contribute. You know how github works:).
+
+
+----------------
+
+For more code examples, please check: https://github.com/nomemory/mapneat

@@ -665,4 +665,4 @@ Anyone if free to contribute. You know how github works:).
 
 ----------------
 
-For more code examples, please check: https://github.com/nomemory/mapneat
+For more code examples, please check: https://github.com/nomemory/mapneat-examples

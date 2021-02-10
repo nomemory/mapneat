@@ -24,6 +24,20 @@ Under the hood **MapNeat** is using:
 
 # Getting Started
 
+For newver version (>=0.9.5):
+
+```xml
+<dependency>
+  <groupId>net.andreinc</groupId>
+  <artifactId>mapneat</artifactId>
+  <version>0.9.5</version>
+</dependency>
+```
+
+```
+implementation 'net.andreinc:mapneat:0.9.5'
+```
+
 For older versions (<=0.9.4) are available in [jcenter()](https://bintray.com/nomemory/maven/mapneat) and can use used with Maven and Gradle.
 
 # How it works

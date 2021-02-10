@@ -7,6 +7,10 @@ Under the hood **MapNeat** is using:
 * [JSON In Java](https://github.com/stleary/JSON-java) for converting from XML to JSON;
 * [JSONAssert](http://jsonassert.skyscreamer.org/) for making JSON assertions (testing purposes).
 
+Blog articles:
+* [Hello world, mapneat!](https://www.andreinc.net/2021/01/31/hello-world-mapneat)
+* [XML to JSON using mapneat](https://www.andreinc.net/2021/02/01/xml-to-json-using-mapneat) 
+
 # Table of contents
 
 * [Getting started](#getting-started)

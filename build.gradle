@@ -1,9 +1,16 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.21'
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'maven'
+    apply plugin: 'signing'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+group = "net.andreinc"
+version = "0.9.4"
+archivesBaseName = "mapneat"
+
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -35,4 +42,66 @@ compileKotlin {
 
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'mapneat'
+                packaging 'jar'
+                description "JSON to JSON and XML to JSON transformation library"
+                url 'https://github.com/nomemory/mapneat'
+
+                scm {
+                    connection 'https://github.com/nomemory/mapneat'
+                    developerConnection 'https://github.com/nomemory/mapneat'
+                    url 'https://github.com/nomemory/mapneat'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'nomemory'
+                        name 'nomemory'
+                        email 'gnomemory@yahoo.com'
+                    }
+                }
+            }
+        }
+    }
 }

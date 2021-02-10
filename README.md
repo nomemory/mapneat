@@ -30,12 +30,12 @@ For newver version (>=0.9.5):
 <dependency>
   <groupId>net.andreinc</groupId>
   <artifactId>mapneat</artifactId>
-  <version>0.9.5</version>
+  <version>0.9.6</version>
 </dependency>
 ```
 
 ```
-implementation 'net.andreinc:mapneat:0.9.5'
+implementation 'net.andreinc:mapneat:0.9.6
 ```
 
 For older versions (<=0.9.4) are available in [jcenter()](https://bintray.com/nomemory/maven/mapneat) and can use used with Maven and Gradle.

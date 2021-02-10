@@ -39,21 +39,21 @@ object KotlinScriptRunner : Logging {
     }
 }
 
-fun main() {
-
-    val script = """
-        "ABC" + aValue
-    """
-
-    val props1 = listOf(
-        ProvidedProperty("aValue", Int::class, 3)
-    )
-
-    val props2 = listOf(
-        ProvidedProperty("aValue", Int::class, 4)
-    )
-
-    repeat(1) {
-        println(evalAsString(script.toScriptSource(), props2))
-    }
-}
+//fun main() {
+//
+//    val script = """
+//        "ABC" + aValue
+//    """
+//
+//    val props1 = listOf(
+//        ProvidedProperty("aValue", Int::class, 3)
+//    )
+//
+//    val props2 = listOf(
+//        ProvidedProperty("aValue", Int::class, 4)
+//    )
+//
+//    repeat(1) {
+//        println(evalAsString(script.toScriptSource(), props2))
+//    }
+//}

@@ -1,8 +1,10 @@
 package net.andreinc.mapneat.experimental.scripting
 
+import net.andreinc.mapneat.experimental.scripting.KotlinScriptRunner.evalAsString
 import org.apache.logging.log4j.kotlin.Logging
 import kotlin.reflect.KClass
 import kotlin.script.experimental.api.*
+import kotlin.script.experimental.host.toScriptSource
 import kotlin.script.experimental.jvm.dependenciesFromCurrentContext
 import kotlin.script.experimental.jvm.jvm
 import kotlin.script.experimental.jvmhost.BasicJvmScriptingHost
@@ -32,29 +34,26 @@ object KotlinScriptRunner : Logging {
         return BasicJvmScriptingHost().eval(sourceCode, compileConfig, evaluationConfig)
     }
 
-    fun evalAsString(sourceCode: SourceCode, props: List<ProvidedProperty>) : String {
-        return eval(sourceCode, props).valueOrThrow().returnValue.toString()
+    fun evalAsString(sourceCode: SourceCode, props: List<ProvidedProperty>) : Any? {
+        return eval(sourceCode, props).valueOrThrow().returnValue
     }
 }
 
-//fun main() {
-//
-//    val script = """
-//        json("{}") {
-//            "a" /= "Andrei"
-//            "b" /= aValue
-//        }
-//    """
-//
-//    val props1 = listOf(
-//        ProvidedProperty("aValue", Int::class, 3)
-//    )
-//
-//    val props2 = listOf(
-//        ProvidedProperty("aValue", Int::class, 4)
-//    )
-//
-//    repeat(1) {
-//        println(evalAsString(script.toScriptSource(), props2))
-//    }
-//}
+fun main() {
+
+    val script = """
+        "ABC" + aValue
+    """
+
+    val props1 = listOf(
+        ProvidedProperty("aValue", Int::class, 3)
+    )
+
+    val props2 = listOf(
+        ProvidedProperty("aValue", Int::class, 4)
+    )
+
+    repeat(1) {
+        println(evalAsString(script.toScriptSource(), props2))
+    }
+}

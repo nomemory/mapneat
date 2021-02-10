@@ -24,20 +24,25 @@ Under the hood **MapNeat** is using:
 
 # Getting Started
 
-The library is available in [jcenter()](https://bintray.com/nomemory/maven/mapneat) and can use used with Maven and Gradle:
+For newer versions (>=0.9.4) you can find the library in maven central:
 
-```kotlin
-repositories {
-    jcenter()
-    mavenCentral()
-}
+Maven:
 
-dependencies {
-    //
-   implementation "net.andreinc.mapneat:mapneat:0.9.4"
-    // 
-}
-``` 
+```xml
+<dependency>
+  <groupId>net.andreinc</groupId>
+  <artifactId>mapneat</artifactId>
+  <version>0.9.4</version>
+</dependency>
+```
+
+Gradle
+
+```groovy
+implementation "net.andreinc:mapneat:0.9.4"
+```
+
+For older versions (<=0.9.4) are available in [jcenter()](https://bintray.com/nomemory/maven/mapneat) and can use used with Maven and Gradle.
 
 # How it works
 

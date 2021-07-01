@@ -10,12 +10,12 @@ import org.apache.logging.log4j.kotlin.Logging
 
 typealias AssignOperationMethod = () -> Any
 
-class Assign(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any>, transformationId : String) :
+class Assign(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any?>, transformationId : String) :
     Operation(sourceCtx, targetMapRef, transformationId),
     MappingOperation,
     Logging {
 
-    lateinit var value : Any
+    var value : Any? = null
     lateinit var method: AssignOperationMethod
 
     override fun doOperation() {
@@ -26,16 +26,23 @@ class Assign(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any>, tran
         }
     }
 
-    override fun getMappedValue(): Any {
-        return if (this::value.isInitialized) {
-            if (value is MapNeatObjectMap) {
-                (value as MapNeatObjectMap).getObjectMap()
+    override fun getMappedValue(): Any? {
+        return if (value != null) {
+            if (value!! is MapNeatObjectMap) {
+                (value!! as MapNeatObjectMap).getObjectMap()
             } else {
                 value
             }
         } else if (this::method.isInitialized) {
-            method()
-        } else {
+            try {
+                method()
+            } catch (ex: NullPointerException) {
+                null
+            }
+        } else if (value == null) {
+            null
+        }
+        else {
             throw AssignOperationNotInitialized(fullFieldPath)
         }
     }

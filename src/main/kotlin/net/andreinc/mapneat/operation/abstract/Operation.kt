@@ -11,9 +11,9 @@ import java.util.*
 import kotlin.collections.LinkedHashMap
 
 class FieldContext(val path: List<String>, val name: String, val arrayChange: ArrayChange)
-typealias FieldAction = (MutableMap<String, Any>, FieldContext) -> Unit
+typealias FieldAction = (MutableMap<String, Any?>, FieldContext) -> Unit
 
-abstract class Operation(private val sourceCtx: ReadContext, val targetMapRef: MutableMap<String, Any>, val transformationId : String = UUID.randomUUID().toString()) {
+abstract class Operation(private val sourceCtx: ReadContext, val targetMapRef: MutableMap<String, Any?>, val transformationId : String = UUID.randomUUID().toString()) {
 
     companion object {
         // Mainly used for logging purposes
@@ -47,9 +47,9 @@ abstract class Operation(private val sourceCtx: ReadContext, val targetMapRef: M
         for (e in fullPath) {
             try {
                 if (!current.containsKey(e)) {
-                    current[e] = LinkedHashMap<String, Any>()
+                    current[e] = LinkedHashMap<String, Any?>()
                 }
-                current = current[e] as MutableMap<String, Any>
+                current = current[e] as MutableMap<String, Any?>
             } catch (ex: ClassCastException) {
                 throw FieldAlreadyExistsAndNotAnObject(fieldName, fullPath)
             }

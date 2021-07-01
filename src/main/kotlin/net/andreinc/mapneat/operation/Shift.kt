@@ -7,7 +7,7 @@ import net.andreinc.mapneat.operation.abstract.Operation
 import org.apache.logging.log4j.kotlin.Logging
 import java.lang.Exception
 
-class Shift(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any>, transformationId : String) :
+class Shift(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any?>, transformationId : String) :
     Operation(sourceCtx, targetMapRef, transformationId),
     MappingOperation,
     Logging {
@@ -21,7 +21,7 @@ class Shift(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any>, trans
         }
     }
 
-    override fun getMappedValue(): Any {
+    override fun getMappedValue(): Any? {
         if (!this::jsonPath.isInitialized)
             throw JsonPathNotInitialized(fullFieldPath)
         val result = if (!this.jsonPath.lenient) {
@@ -33,7 +33,9 @@ class Shift(sourceCtx: ReadContext, targetMapRef: MutableMap<String, Any>, trans
                 ""
             }
         }
-        return this.jsonPath.processor(result)
+        return if (result != null)
+            this.jsonPath.processor(result)
+        else null
     }
 }
 

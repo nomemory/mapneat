@@ -8,7 +8,7 @@ import net.andreinc.mapneat.config.JsonPathConfiguration.mapNeatConfiguration
 
 open class MapNeatObjectMap (val source: String, private val jsonPathConfig : Configuration = mapNeatConfiguration) {
 
-    protected val targetMap = LinkedHashMap<String, Any>()
+    protected val targetMap = LinkedHashMap<String, Any?>()
     protected val sourceCtx: ReadContext = JsonPath.using(jsonPathConfig).parse(source)
 
     fun sourceCtx() : ReadContext {
@@ -19,7 +19,7 @@ open class MapNeatObjectMap (val source: String, private val jsonPathConfig : Co
         return JsonPath.using(mapNeatConfiguration).parse(targetMap)
     }
 
-    fun getObjectMap() : Map<String, Any> {
+    fun getObjectMap() : Map<String, Any?> {
         return targetMap
     }
 

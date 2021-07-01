@@ -11,16 +11,16 @@ enum class ArrayChange (val isAffecting: Boolean) {
 
 interface MappingOperation {
 
-    fun getMappedValue(): Any
+    fun getMappedValue(): Any?
 
-    fun doMappingOperation(current: MutableMap<String, Any>, fieldContext: FieldContext) {
+    fun doMappingOperation(current: MutableMap<String, Any?>, fieldContext: FieldContext) {
         MappingAction(current, fieldContext, getMappedValue())
             .doAction()
     }
 }
 
 @Suppress("UNCHECKED_CAST")
-class MappingAction (val current: MutableMap<String, Any>, val fieldContext: FieldContext, val mappedValue: Any) {
+class MappingAction (val current: MutableMap<String, Any?>, val fieldContext: FieldContext, val mappedValue: Any?) {
 
     private var field: String = fieldContext.name
     private var arrayChange: ArrayChange = fieldContext.arrayChange
@@ -60,7 +60,7 @@ class MappingAction (val current: MutableMap<String, Any>, val fieldContext: Fie
     }
 
     // Transforms current one in a mutable list if needed
-    private fun currentAsMutableList() : MutableList<Any> {
+    private fun currentAsMutableList() : MutableList<Any?> {
         if (!current.containsKey(field)) {
             // If the current path doesn't exist, create an empty MutableList
             current[field] = mutableListOf<Any>()
@@ -81,7 +81,7 @@ class MappingAction (val current: MutableMap<String, Any>, val fieldContext: Fie
                 current[field] = mutableListOf(current[field] as Any)
             }
         }
-        return current[field] as MutableList<Any>
+        return current[field] as MutableList<Any?>
     }
 
     // Maps a certain value on the selected field from the Field Context

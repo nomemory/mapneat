@@ -1,5 +1,7 @@
 package net.andreinc.mapneat.dsl
 
+import com.jayway.jsonpath.Configuration
+import net.andreinc.mapneat.config.JsonPathConfiguration
 import net.andreinc.mapneat.model.MapNeatObjectMap
 import net.andreinc.mapneat.model.MapNeatSource
 import net.andreinc.mapneat.operation.*
@@ -12,7 +14,7 @@ import kotlin.math.exp
  *
  * The MapNeat class extends MapNeatObjectMap which holds internal representation of a JSON as a MutableMap<String, Any>
  */
-class MapNeat(val inputJson: String, val parentObject: MapNeat? = null, val transformationId : String = UUID.randomUUID().toString()) : MapNeatObjectMap(inputJson), Logging {
+class MapNeat(val inputJson: String, val parentObject: MapNeat? = null, val transformationId : String = UUID.randomUUID().toString(), private val jsonPathConfig: Configuration = JsonPathConfiguration.mapNeatConfiguration) : MapNeatObjectMap(inputJson, jsonPathConfig), Logging {
 
     fun hasParent() : Boolean {
         return parentObject != null
@@ -162,20 +164,20 @@ class MapNeat(val inputJson: String, val parentObject: MapNeat? = null, val tran
         return getPrettyString()
     }
 
-    fun json(init: MapNeat.() -> Unit) : Map<String, Any> {
-        return MapNeat(super.source, this, transformationId)
+    fun json(init: MapNeat.() -> Unit) : Map<String, Any?> {
+        return MapNeat(super.source, this, transformationId, jsonPathConfig)
             .apply(init)
             .getObjectMap()
     }
 
-    fun json(json: String, init: MapNeat.() -> Unit) : Map<String, Any> {
-        return MapNeat(json, this, transformationId)
+    fun json(json: String, init: MapNeat.() -> Unit) : Map<String, Any?> {
+        return MapNeat(json, this, transformationId, jsonPathConfig)
             .apply(init)
             .getObjectMap()
     }
 
-    fun json(source: MapNeatSource, init: MapNeat.() -> Unit): Map<String, Any> {
-        return MapNeat(source.content, this, transformationId)
+    fun json(source: MapNeatSource, init: MapNeat.() -> Unit): Map<String, Any?> {
+        return MapNeat(source.content, this, transformationId, jsonPathConfig)
             .apply(init)
             .getObjectMap()
     }
@@ -187,7 +189,17 @@ inline fun json(json: String, init: MapNeat.() -> Unit)  : MapNeat {
             .apply(init)
 }
 
+inline fun json(json: String, jsonPathConfig: Configuration, init: MapNeat.() -> Unit)  : MapNeat {
+    return MapNeat(json, jsonPathConfig = jsonPathConfig)
+        .apply(init)
+}
+
 inline fun json(source: MapNeatSource, init: MapNeat.() -> Unit) : MapNeat {
     return MapNeat(source.content)
             .apply(init)
+}
+
+inline fun json(source: MapNeatSource, jsonPathConfig: Configuration, init: MapNeat.() -> Unit) : MapNeat {
+    return MapNeat(source.content, jsonPathConfig = jsonPathConfig)
+        .apply(init)
 }

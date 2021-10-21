@@ -1,0 +1,8 @@
+{
+  "existing" : "test",
+  "notExisting" : null,
+  "notExisting1" : null,
+  "notExisting3" : {
+    "subPath" : null
+  }
+}

@@ -8,7 +8,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = "net.andreinc"
-version = "0.9.4"
+version = "0.9.5"
 archivesBaseName = "mapneat"
 
 sourceCompatibility = 1.8

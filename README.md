@@ -34,7 +34,7 @@ For newver version (>=0.9.5):
 <dependency>
   <groupId>net.andreinc</groupId>
   <artifactId>mapneat</artifactId>
-  <version>0.9.8</version>
+  <version>0.9.9</version>
 </dependency>
 ```
 

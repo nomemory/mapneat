@@ -39,10 +39,10 @@ For newver version (>=0.9.5):
 ```
 
 ```
-implementation 'net.andreinc:mapneat:0.9.8
+implementation 'net.andreinc:mapneat:0.9.9`
 ```
 
-> For security issues, please update to `0.9.8`. 
+> For security issues, please update to `0.9.9`. 
 
 # How it works
 

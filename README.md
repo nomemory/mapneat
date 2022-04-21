@@ -34,15 +34,15 @@ For newver version (>=0.9.5):
 <dependency>
   <groupId>net.andreinc</groupId>
   <artifactId>mapneat</artifactId>
-  <version>0.9.9</version>
+  <version>1.0.0</version>
 </dependency>
 ```
 
 ```
-implementation 'net.andreinc:mapneat:0.9.9`
+implementation 'net.andreinc:mapneat:1.0.0`
 ```
 
-> For security issues, please update to `0.9.9`. 
+> For security issues, please update to `1.0.0`. 
 
 # How it works
 
